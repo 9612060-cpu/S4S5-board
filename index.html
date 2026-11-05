@@ -1,0 +1,888 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0f1720">
+<title>工地看板｜臺北港南碼頭C填區公共設施及永久護岸暨S04~S05碼頭工程(含南一碼頭)</title>
+<style>
+:root{
+  --bg:#0b1219;--card:#16212c;--card2:#1c2a37;--line:#26333f;--ink:#e8eef4;--sub:#9fb0c0;--mute:#6f8294;
+  --blue:#85B7EB;--blue-d:#185FA5;--teal:#5DCAA5;--amber:#FAC775;--amber-bg:#3a2a0e;--amber-ink:#FAEEDA;
+  --red:#F7C1C1;--red-bg:#501313;--coral:#F0997B;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Microsoft JhengHei","Noto Sans TC","PingFang TC",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+body{min-height:100vh}
+.top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:12px 18px 8px;flex-wrap:wrap}
+.top h1{margin:0;font-size:21px;font-weight:600;letter-spacing:.01em;line-height:1.35}
+.top .meta{color:var(--sub);font-size:14px;display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+#clock{font-size:26px;color:#fff;font-weight:600;font-variant-numeric:tabular-nums}
+#banner{display:none;margin:0 18px 8px;padding:8px 12px;border-radius:8px;background:var(--amber-bg);color:var(--amber);font-size:14px}
+#banner.on{display:block}
+.grid{display:grid;gap:12px;padding:0 18px 14px}
+.card{background:var(--card);border-radius:12px;padding:14px 16px;min-width:0;min-height:0;display:flex;flex-direction:column;position:relative;border:1px solid transparent}
+.card h2{margin:0 0 8px;font-size:17px;font-weight:600;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.card h2 small{font-size:12px;font-weight:400;color:var(--mute);white-space:nowrap}
+.lb{font-size:13px;color:var(--sub)}
+.big{font-size:44px;font-weight:600;line-height:1.05;font-variant-numeric:tabular-nums}
+.mid{font-size:28px;font-weight:600;line-height:1.1;font-variant-numeric:tabular-nums}
+.err{font-size:12px;color:var(--coral);margin-top:6px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.chip{background:var(--red-bg);color:var(--red);font-size:13px;border-radius:6px;padding:3px 9px}
+.remind{background:var(--amber-bg);color:var(--amber-ink);border-radius:8px;padding:10px 12px;font-size:15px;line-height:1.65;flex:1;overflow:auto}
+.remind .t{color:var(--amber);font-weight:600;margin-bottom:2px}
+.remind ul{margin:0;padding-left:1.1em}
+.ok{background:#0e2a22;color:#9FE1CB}
+.pw{flex:1;display:flex;gap:14px;min-height:0}
+#pg-main{flex:1.1;display:flex;flex-direction:column;min-height:0;min-width:0}
+#pg-work{flex:1;min-width:0;overflow:auto;border-left:1px solid var(--line);padding-left:14px}
+ol.work{margin:0;padding-left:1.4em;font-size:15px;line-height:1.6}
+ol.work li{margin-bottom:3px}
+body.stack .pw{flex-direction:column}
+body.stack #pg-work{border-left:0;border-top:1px solid var(--line);padding:10px 0 0}
+body.carousel ol.work{font-size:18px}
+#pg-main .side{width:112px}
+#pg-main .mid{font-size:24px}
+body.stack #pg-main .side{width:auto}
+.days{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.dy{background:var(--card2);border-radius:8px;padding:8px 10px;line-height:1.45}
+.remind{flex:0 1 auto}
+.row{display:flex;gap:12px}
+.chart{flex:1;min-height:150px;position:relative}
+.chart svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.side{width:190px;flex:none;display:flex;flex-direction:column;gap:3px}
+.note{font-size:12px;color:var(--mute);margin-top:6px}
+.spring{margin-top:6px;font-size:14px;color:var(--amber)}
+.spring.soon{background:var(--amber-bg);border-radius:6px;padding:4px 8px}
+.ct-day{margin-bottom:8px}
+.ct-day .d{font-size:14px;color:var(--sub);margin-bottom:2px}
+.ct-day.tomorrow .d{color:var(--amber)}
+.ct-day.today .d{color:var(--teal)}
+.ct{display:flex;gap:10px;font-size:15px;line-height:1.5;align-items:baseline}
+.ct .a{flex:none;width:48px;font-weight:600}
+.ct .p{flex:1;min-width:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ct .tag{font-size:11px;color:var(--blue);border:1px solid var(--blue-d);border-radius:4px;padding:0 4px;margin-left:4px}
+.ct-list{overflow:auto;flex:1}
+.ct-fold{cursor:pointer;user-select:none}
+.ct-fold:hover{color:var(--ink)}
+.ct-hint{font-size:12px;color:var(--mute);margin-left:6px}
+body.carousel .ct-hint{display:none}
+.ty-off{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--sub)}
+.ty-off .ic{width:40px;height:40px;border-radius:50%;border:3px solid var(--teal);position:relative}
+.ty-off .ic:after{content:"";position:absolute;left:11px;top:5px;width:9px;height:18px;border:solid var(--teal);border-width:0 3px 3px 0;transform:rotate(45deg)}
+.ty-on .hl{background:var(--red-bg);color:var(--red);border-radius:8px;padding:6px 10px;font-size:18px;font-weight:600;display:inline-block;animation:blink 1.6s ease-in-out infinite}
+.ty-img{flex:1;min-height:0;margin-top:8px;display:flex;justify-content:center}
+.ty-img a{display:flex;max-width:100%;max-height:100%}
+.ty-img img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px}
+@keyframes blink{50%{opacity:.55}}
+.foot{display:flex;justify-content:space-between;color:var(--mute);font-size:12px;padding:0 18px 10px}
+.doclink{display:inline-flex;align-items:center;gap:8px;color:#fff;background:#185FA5;text-decoration:none;font-size:18px;font-weight:600;border:1px solid #378ADD;border-radius:10px;padding:8px 20px;align-self:center}
+.doclink:hover{background:#1f6fc0}
+.doclink small{font-size:13px;font-weight:400;color:#B5D4F4}
+body.stack .doclink{font-size:15px;padding:6px 14px;width:100%;justify-content:center}
+body.carousel .doclink{display:none}
+.top .doclink + .camlink{margin-left:-4px}
+body:not(.stack) .top{justify-content:flex-start}
+.camlink{background:#3B6D11;border-color:#639922}
+.camlink:hover{background:#4a8616}
+.camlink small{color:#C0DD97}
+.foot{align-items:center}
+.dots span{display:inline-block;width:8px;height:8px;border-radius:50%;background:#3a4a5a;margin-left:6px}
+.dots span.on{background:var(--teal)}
+/* 動畫 */
+.card.enter{animation:enter .7s ease-out both}
+@keyframes enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.card.flash{animation:flash 1.6s ease-out}
+@keyframes flash{0%{border-color:var(--teal)}100%{border-color:transparent}}
+.draw{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:draw 1.8s ease-out forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.pulse{animation:pulse 1.8s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes pulse{0%{transform:scale(1);opacity:.85}70%,100%{transform:scale(2.6);opacity:0}}
+/* 版面一：電腦（一頁全覽） */
+body.desk .grid{grid-template-columns:minmax(320px,.85fr) minmax(520px,1.85fr) minmax(320px,1.1fr);grid-template-rows:max(330px,calc((100vh - 116px) / 2)) max(330px,calc((100vh - 116px) / 2)) minmax(400px,auto) auto;grid-template-areas:"w b y" "w p c" "t t t" "m m m"}
+body.desk.typhoon .grid{grid-template-areas:"w b y" "c p y" "t t t" "m m m"}
+body.desk #c-cam{grid-area:m}
+/* 本日工地現況影像（camera.py 每 3 小時存的截圖） */
+.card.off{display:none!important}
+.camg{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+.camt{position:relative;cursor:zoom-in;border-radius:8px;overflow:hidden;background:#000;aspect-ratio:16/9}
+.camt img{width:100%;height:100%;object-fit:cover;display:block}
+.camt span{position:absolute;left:6px;bottom:5px;font-size:12px;color:#fff;background:rgba(0,0,0,.55);padding:1px 6px;border-radius:5px}
+.camnote{margin-top:8px;font-size:12px;color:var(--mute)}
+.camnote a{color:var(--mute)}
+body.carousel #c-cam .body{flex:1;min-height:0;display:flex;flex-direction:column}
+body.carousel .camg{flex:1;min-height:0;grid-template-columns:repeat(3,1fr);grid-auto-rows:minmax(0,1fr)}
+body.carousel .camt{aspect-ratio:auto;min-height:0}
+body.stack .camg{grid-template-columns:repeat(2,1fr);gap:6px}
+body.desk .card{overflow:hidden}
+body.desk #c-weather .body{overflow:auto;min-height:0}
+body.desk .pw{flex-direction:column;gap:8px}
+body.desk #pg-work{order:-1;flex:none;max-height:55%;border-left:0;padding:0 0 8px;border-bottom:1px solid var(--line)}
+body.desk ol.work{columns:2;column-gap:28px}
+body.desk ol.work li{break-inside:avoid}
+body.desk #pg-main .side{width:150px}
+body.desk .ct .p{-webkit-line-clamp:1}
+body.desk .ct{line-height:1.6}
+body.desk #c-weather .remind{font-size:16px;line-height:1.7}
+body.desk #c-weather .big{font-size:54px}
+body.desk #c-weather .dy{padding:10px;font-size:15px}
+body.desk #c-weather .days{margin-top:14px}
+body.desk #c-weather{grid-area:w}body.desk #c-tide{grid-area:t}body.desk #c-typhoon{grid-area:y}
+body.desk #c-progress{grid-area:p}body.desk #c-concrete{grid-area:c}body.desk #c-bulletin{grid-area:b}
+body.desk #c-tide .side{width:240px}
+body.desk .foot .dots{display:none}
+/* 版面二：手機直拿（往下捲） */
+body.stack .grid{grid-template-columns:1fr}
+body.stack #c-bulletin{order:-1}
+body.stack .card{min-height:auto}
+body.stack .chart{min-height:200px}
+body.stack .side{width:150px}
+body.stack .row.wrap{flex-direction:column}
+body.stack .row.wrap .side{width:auto;flex-direction:row;flex-wrap:wrap;gap:4px 16px}
+body.stack .foot .dots{display:none}
+body.stack .top h1{font-size:19px}
+/* 版面三：看板手機（橫放輪播） */
+body.carousel .grid{height:calc(100vh - 78px);grid-template-columns:1fr;grid-template-rows:1fr}
+body.carousel .card{grid-area:1/1;display:none}
+body.carousel .card.show{display:flex}
+body.carousel .top{padding:8px 14px 4px}
+body.carousel .card h2{font-size:22px}
+body.carousel .remind{font-size:18px}
+body.carousel .ct{font-size:20px}
+body.carousel .ct .a{width:62px}
+body.carousel .side{width:230px}
+/* 布告欄 */
+#c-bulletin{border-color:#2f3f50}
+.bl{flex:1;display:flex;gap:14px;min-height:0}
+.bl-feat{flex:1.5;min-width:0;display:flex;flex-direction:column;min-height:0}
+.bl-list{flex:1;min-width:0;border-left:1px solid var(--line);padding-left:10px;overflow:auto}
+.bl-tags{display:flex;gap:8px;align-items:center;margin-bottom:4px;flex-wrap:wrap}
+.lv{font-size:12px;border-radius:4px;padding:1px 7px;flex:none}
+.lv-一般{background:var(--card2);color:var(--sub)}.lv-重要{background:var(--amber-bg);color:var(--amber)}.lv-緊急{background:var(--red-bg);color:var(--red)}
+.bl-title{font-size:21px;font-weight:600;line-height:1.35;color:#fff;margin-bottom:6px}
+.bl-main{flex:1;min-height:0;display:flex;gap:12px}
+.bl-body{flex:1;min-width:0;overflow:auto;font-size:15px;line-height:1.7;color:#c8d4e0;word-break:break-word}
+.bl-body a{color:var(--blue)}
+.bl-imgs{width:42%;flex:none;display:flex;flex-direction:column;gap:6px;min-height:0}
+.bl-imgs img{width:100%;flex:1;min-height:0;object-fit:cover;border-radius:8px;cursor:zoom-in;background:#0f1720}
+.bl-imgs .more{font-size:12px;color:var(--sub);text-align:center}
+.bl-links a{display:inline-block;font-size:13px;color:var(--blue);border:1px solid var(--blue-d);border-radius:999px;padding:3px 12px;margin:8px 6px 0 0;text-decoration:none}
+.bl-links a:hover{background:var(--card2)}
+.bl-it{display:flex;gap:8px;align-items:flex-start;padding:7px 8px;border-radius:8px;cursor:pointer;font-size:14px;line-height:1.4}
+.bl-it:hover,.bl-it.on{background:var(--card2)}
+.bl-it .n{min-width:0;flex:1}
+.bl-it .n b{display:block;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink)}
+.bl-it .n span{font-size:12px;color:var(--mute)}
+.bl-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--sub);gap:6px}
+.adminlink{font-size:13px;color:var(--amber);text-decoration:none;border:1px solid #6b4e12;border-radius:999px;padding:2px 10px;font-weight:400}
+.bl-bar{height:2px;background:var(--line);margin-top:8px;border-radius:2px;overflow:hidden}
+.bl-bar i{display:block;height:100%;width:0;background:var(--teal)}
+#urgent{display:none;margin:0 14px 6px;padding:6px 12px;border-radius:8px;background:var(--red-bg);color:var(--red);font-size:17px;font-weight:600}
+body.carousel #urgent.on{display:block}
+body.carousel .bl-title{font-size:26px}
+body.carousel .bl-body{font-size:19px}
+body.stack .bl{flex-direction:column}
+body.stack .bl-list{border-left:0;border-top:1px solid var(--line);padding:8px 0 0}
+body.stack .bl-main{flex-direction:column}
+body.stack .bl-imgs{width:100%}
+body.stack .bl-imgs img{height:200px;flex:none}
+/* 布告欄（電腦、手機）：外面只放主旨＋預覽＋縮圖，點開看全文 */
+.bl-cards{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:8px}
+.bl-card{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:10px;background:var(--card2);cursor:pointer;border:1px solid transparent}
+.bl-card:hover{border-color:var(--line)}
+.bl-card .t{flex:1;min-width:0}
+.bl-card .bl-tags{margin-bottom:3px}
+.bl-card b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:16px;font-weight:600;line-height:1.4;color:#fff}
+.bl-card p{margin:3px 0 0;font-size:13px;line-height:1.55;color:#aebccb;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
+.bl-card .th{position:relative;flex:none;width:96px;height:72px;border-radius:8px;overflow:hidden;background:#0f1720}
+.bl-card .th img{width:100%;height:100%;object-fit:cover;display:block}
+.bl-card .th i{position:absolute;right:4px;bottom:4px;font-style:normal;font-size:11px;color:#fff;background:rgba(0,0,0,.6);padding:0 5px;border-radius:4px}
+.bl-allbtn{align-self:center;margin-top:2px;background:none;border:1px solid var(--line);color:var(--sub);border-radius:999px;padding:5px 16px;font-size:13px;cursor:pointer}
+#bl-dlg{position:fixed;inset:0;z-index:28;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;padding:16px}
+#bl-dlg.on{display:flex}
+#bl-dlg .box{position:relative;background:var(--card);border:1px solid var(--line);border-radius:14px;width:min(760px,100%);max-height:100%;overflow:auto;padding:18px 20px 20px}
+#bl-dlg .x{position:absolute;top:10px;right:10px;width:40px;height:40px;border-radius:999px;border:1px solid var(--line);background:var(--card2);color:#fff;font-size:20px;cursor:pointer}
+#bl-dlg .bl-title,#bl-dlg .bl-tags{padding-right:44px}
+#bl-dlg .bl-body{overflow:visible;font-size:16px}
+.dl-imgs{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:14px}
+.dl-imgs img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;cursor:zoom-in;background:#0f1720}
+body.stack #bl-dlg{padding:0}
+body.stack #bl-dlg .box{border-radius:0;height:100%;max-height:none}
+#lb{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:30;display:none;align-items:center;justify-content:center}
+#lb.on{display:flex}
+#lb img{max-width:92vw;max-height:86vh;border-radius:6px}
+#lb button{position:absolute;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:999px;font-size:22px;width:48px;height:48px;cursor:pointer}
+#lb .c{top:20px;right:20px}#lb .p{left:20px;top:50%}#lb .nx{right:20px;top:50%}
+#lb .cap{position:absolute;bottom:18px;color:#ccc;font-size:14px}
+/* 潮汐與海況 */
+.tw{flex:1;display:flex;gap:16px;min-height:0}
+#wave-body{flex:1.25;min-width:0;display:flex;flex-direction:column;border-left:1px solid var(--line);padding-left:16px}
+.wv-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--sub);margin-bottom:4px}
+.wv-head i{font-style:normal}
+#wave-chart{position:relative;height:190px}
+#wave-chart svg{position:absolute;inset:0;width:100%;height:100%}
+.wv-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.wv-card{background:var(--card2);border-radius:8px;padding:8px 10px;cursor:pointer;border:1px solid transparent;font-size:13px;line-height:1.5}
+.wv-card:hover{border-color:#3a4a5a}.wv-card.on{border-color:var(--blue)}
+.wv-card b{font-size:20px}
+.wv-card .tg{float:right;color:var(--blue);font-size:12px}
+.wv-tbl{margin-top:8px;background:#0f1720;border:1px solid #3a4a5a;border-radius:8px;padding:8px}
+.wv-tbl table{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}
+.wv-tbl th{font-weight:500;color:var(--sub);padding:4px 2px;border-bottom:1px solid #3a4a5a;text-align:center}
+.wv-tbl td{text-align:center;padding:3px 2px;border-bottom:1px solid var(--line)}
+.wv-tbl tr.day td{background:var(--card);color:var(--sub);text-align:left;padding-left:8px}
+.wv-tbl td.hot{color:var(--red);font-weight:600;background:#3d1414}
+.wv-tbl tr.now td{outline:1px solid var(--teal)}
+.wv-x{cursor:pointer;border:1px solid #3a4a5a;border-radius:4px;padding:0 6px}
+body.desk .tw{align-items:flex-start}
+body.desk #tide-body{height:340px;flex:1 1 0}
+body.desk #wave-body{flex:1.25 1 0}
+body.stack .tw{flex-direction:column}
+body.stack #wave-body{border-left:0;border-top:1px solid var(--line);padding:10px 0 0}
+body.carousel .tw{gap:12px}
+body.carousel .wv-tbl table{font-size:16px}
+body.carousel #tide-chart{display:none}
+body.carousel #tide-body .side{width:auto}
+body.carousel #tide-body{flex:.8}
+body.carousel #wave-body{overflow:hidden}
+/* 開場動畫 */
+#intro{position:fixed;inset:0;background:#000;z-index:20;display:flex;align-items:center;justify-content:center;transition:opacity .8s ease}
+#intro video{width:100%;height:100%;object-fit:contain}
+#intro.out{opacity:0;pointer-events:none}
+#intro.gone{display:none}
+#skip{position:absolute;right:20px;bottom:20px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:8px 18px;font-size:15px;cursor:pointer;font-family:inherit}
+/* 夜間（只有看板手機） */
+#nightmask{display:none;position:fixed;inset:0;background:#000;opacity:.72;pointer-events:none;z-index:9}
+body.night #nightmask{display:block}
+body.night *,body.night *:before,body.night *:after{animation:none!important;transition:none!important}
+</style>
+</head>
+<body>
+<div class="top">
+  <h1>臺北港南碼頭C填區公共設施及永久護岸暨S04~S05碼頭工程(含南一碼頭)</h1>
+  <a class="doclink" id="doclink" href="https://tsengfanchi-arch.github.io/S4S5PROJECT/" target="_blank" rel="noopener">📁 文件管理系統 <small>S04~S05 碼頭工程</small> ↗</a>
+  <a class="doclink camlink" id="camlink" href="http://61.219.46.210:9001/" target="_blank" rel="noopener">📹 工地監視器 <small>即時影像</small> ↗</a>
+  <div class="meta" style="margin-left:auto"><span id="clock">--:--</span><span id="today">--</span><span id="upd">資料更新 --</span></div>
+</div>
+<div id="banner"></div>
+<div id="urgent"></div>
+<div class="grid">
+  <section class="card" id="c-bulletin"><h2><span>布告欄 <small id="bl-count"></small></span><span id="bl-admin"></span></h2><div class="body" style="flex:1;display:flex;flex-direction:column;min-height:0"></div></section>
+  <section class="card" id="c-weather"><h2>天氣・八里<small>中央氣象署</small></h2><div class="body"></div></section>
+  <section class="card" id="c-tide"><h2>潮汐與海況<small id="tide-sub"></small></h2><div class="tw"><div class="body" id="tide-body" style="flex:1;display:flex;flex-direction:column;min-height:0;min-width:0"></div><div id="wave-body"></div></div></section>
+  <section class="card" id="c-typhoon"><h2>颱風<small id="ty-sub"></small></h2><div class="body" style="flex:1;display:flex;flex-direction:column;min-height:0"></div></section>
+  <section class="card" id="c-progress"><h2>工程進行情況<small id="pg-sub">監造日報表</small></h2><div class="pw"><div class="body" id="pg-main"></div><div id="pg-work"></div></div></section>
+  <section class="card" id="c-concrete"><h2>抗壓試驗<small>混凝土用量統計表</small></h2><div class="body" style="flex:1;display:flex;flex-direction:column;min-height:0"></div></section>
+  <section class="card off" id="c-cam"><h2>本日工地現況影像<small id="cam-sub">每 3 小時更新</small></h2><div class="body"><div class="camg" id="cam-g"></div><div class="camnote">即時影像請登入<a href="http://61.219.46.210:9001/" target="_blank" rel="noopener">監視器系統</a></div></div></section>
+</div>
+<div class="foot"><span id="src">築港高程＝TWVD＋1.43 m（依設計圖說，約值）</span><span class="dots" id="dots"></span></div>
+<div id="nightmask"></div>
+<div id="bl-dlg"><div class="box" role="dialog" aria-modal="true"><button class="x" type="button" aria-label="關閉">×</button><div id="bl-dlg-c"></div></div></div>
+<div id="lb"><img alt="公告照片"><button class="c" type="button" aria-label="關閉">×</button><button class="p" type="button" aria-label="上一張">‹</button><button class="nx" type="button" aria-label="下一張">›</button><div class="cap"></div></div>
+<div id="intro"><video id="introv" src="intro.mp4" autoplay muted playsinline preload="auto"></video><button id="skip" type="button">略過</button></div>
+<script>
+"use strict";
+const KIOSK = new URLSearchParams(location.search).has("kiosk");
+const PUBLIC = /github\.io$/.test(location.hostname) || new URLSearchParams(location.search).has("public");   // 業主版公開網站：只能看、每小時更新
+const NIGHT_FROM = 19, NIGHT_TO = 6, ROTATE_SEC = 15, POLL_SEC = 60;
+const STALE_MIN = PUBLIC ? 150 : 30;   // 公開版每小時推送一次，超過兩個半小時沒更新才提示
+const WD = "日一二三四五六";
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(2, "0");
+const hm = d => pad(d.getHours()) + ":" + pad(d.getMinutes());
+const md = d => (d.getMonth() + 1) + "/" + d.getDate();
+const mdw = d => md(d) + "（" + WD[d.getDay()] + "）";
+const roc = d => (d.getFullYear() - 1911) + "/" + pad(d.getMonth() + 1) + "/" + pad(d.getDate()) + "（" + WD[d.getDay()] + "）";
+const P = s => new Date(s);
+const dayKey = d => d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const fmt = (v, n = 0) => v == null || isNaN(v) ? "—" : Number(v).toFixed(n);
+const sgn = (v, n = 2) => v == null ? "—" : (v >= 0 ? "+" : "") + Number(v).toFixed(n);
+
+let data = null, prevJSON = {}, firstRender = true, mode = "", page = 0, lastOk = null;
+const SHOT = new URLSearchParams(location.search).has("nointro");   // 截圖／簡報用：不播開場、不跑動畫
+const quiet = () => SHOT || document.body.classList.contains("night") || matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------- 版面判斷 ---------- */
+function pickMode() {
+  const w = innerWidth, h = innerHeight;
+  const fixvh = new URLSearchParams(location.search).has("fixvh");   // 截圖用：視窗拉高也維持電腦版
+  const m = KIOSK && w > h ? "carousel" : (w >= 1000 && (w > h * 1.1 || fixvh) ? "desk" : "stack");
+  if (m !== mode) {
+    document.body.classList.remove("desk", "stack", "carousel");
+    document.body.classList.add(m);
+    mode = m;
+    page = 0;
+    showPage();
+    if (data && introDone) renderWaves(data.waves);   // 看板手機改成表格版
+  }
+}
+function pages() {
+  const ids = ["c-bulletin", "c-weather", "c-tide", "c-typhoon", "c-concrete", "c-progress", "c-cam"];
+  const ty = data && data.typhoon;
+  return ids.filter(id => (id !== "c-typhoon" || (ty && (ty.active || (ty.cyclones && ty.cyclones.length)))) && (id !== "c-bulletin" || activePosts().length) && (id !== "c-cam" || camData.cams.length));
+}
+function showPage() {
+  const ps = pages();
+  document.querySelectorAll(".card").forEach(c => c.classList.remove("show"));
+  if (mode !== "carousel") { $("dots").innerHTML = ""; return; }
+  page = page % ps.length;
+  const el = $(ps[page]);
+  el.classList.add("show");
+  if (!quiet()) { el.classList.remove("enter"); void el.offsetWidth; el.classList.add("enter"); }
+  $("dots").innerHTML = ps.map((_, i) => `<span class="${i === page ? "on" : ""}"></span>`).join("");
+  redrawCharts();
+}
+setInterval(() => { if (mode === "carousel") { page++; showPage(); } }, ROTATE_SEC * 1000);
+
+/* ---------- 數字跳動 ---------- */
+function countUp(el, to, dec = 0, pre = "", suf = "") {
+  if (to == null || isNaN(to)) { el.textContent = "—"; return; }
+  if (quiet() || !firstRender) { el.textContent = pre + Number(to).toFixed(dec) + suf; return; }
+  const t0 = performance.now(), dur = 900;
+  const step = t => {
+    const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+    el.textContent = pre + (to * e).toFixed(dec) + suf;
+    if (k < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+/* ---------- 天氣 ---------- */
+function renderWeather(w) {
+  const b = $("c-weather").querySelector(".body");
+  if (!w || w.temp === undefined) { b.innerHTML = `<div class="err">${esc(w && w.error || "還沒有天氣資料")}</div>`; return; }
+  const popAt = w.pop_at ? P(w.pop_at) : null, windAt = w.wind_at ? P(w.wind_at) : null;
+  const rel = d => { const n = Math.round((new Date(dayKey(d)) - new Date(dayKey(new Date()))) / 864e5); return (["今天", "明天", "後天"][n] || mdw(d)) + " " + d.getHours() + " 時"; };
+  b.innerHTML = `
+    <div style="display:flex;gap:14px;align-items:baseline;flex-wrap:wrap">
+      <span class="big" id="w-temp">—</span>
+      <span style="font-size:18px">${esc(w.desc || "")}<br><span class="lb">今明 ${fmt(w.tmin)}～${fmt(w.tmax)}°・體感 ${fmt(w.feel)}°</span></span>
+    </div>
+    <div class="row" style="margin:10px 0 4px">
+      <div style="flex:1"><div class="lb">24 小時內最高降雨機率</div><div class="mid" style="color:var(--blue)" id="w-pop">—</div><div class="lb">${popAt ? rel(popAt) + " 起" : ""}</div></div>
+      <div style="flex:1"><div class="lb">最大風力</div><div class="mid" style="color:${w.wind_max >= 6 ? "var(--amber)" : "var(--ink)"}" id="w-wind">—</div><div class="lb">${esc(w.wind_dir || "")}${windAt ? "・" + rel(windAt) : ""}</div></div>
+    </div>
+    ${w.hazards && w.hazards.length ? `<div class="chips">${w.hazards.map(h => `<span class="chip">${esc(h)}</span>`).join("")}</div>` : ""}
+    ${w.reminders && w.reminders.length
+      ? `<div class="remind"><div class="t">施工提醒</div><ul>${w.reminders.map(r => `<li>${esc(r)}</li>`).join("")}</ul></div>`
+      : `<div class="remind ok"><div class="t" style="color:#5DCAA5">施工提醒</div>今明兩天沒有特別的天氣風險，可正常安排施工</div>`}
+    ${w.days && w.days.length ? `<div class="days">${w.days.map((d, i) => {
+      const dd = new Date(d.date + "T00:00:00");
+      return `<div class="dy"><div class="lb">${["今天", "明天", "後天"][i] || ""} ${md(dd)}</div><div style="font-size:15px">${esc(d.desc || "")}</div>
+        <div style="font-size:16px;font-weight:600">${fmt(d.tmin)}～${fmt(d.tmax)}°</div>
+        <div style="font-size:13px;color:${d.pop >= 60 ? "var(--blue)" : "var(--sub)"}">降雨 ${fmt(d.pop)}%</div>
+        <div style="font-size:13px;color:${d.wind >= 6 ? "var(--amber)" : "var(--sub)"}">風 ${fmt(d.wind)} 級</div></div>`; }).join("")}</div>` : ""}
+    <div class="note">預報時間 ${hm(P(w.fetched))}（每 6 小時更新）</div>
+    ${w.error ? `<div class="err">最近一次更新失敗，顯示上次資料</div>` : ""}`;
+  countUp($("w-temp"), w.temp, 0, "", "°");
+  countUp($("w-pop"), w.pop_max, 0, "", "%");
+  countUp($("w-wind"), w.wind_max, 0, "", " 級");
+}
+
+/* ---------- 潮汐 ---------- */
+let tideGeom = null;
+function tidePts(t) { return (t.points || []).map(p => ({ t: P(p.t), kind: p.kind, h: p.h })); }
+function levelAt(pts, now) {
+  for (let i = 0; i < pts.length - 1; i++) {
+    const a = pts[i], b = pts[i + 1];
+    if (now >= a.t && now <= b.t) {
+      const f = (now - a.t) / (b.t - a.t);
+      return { v: a.h + (b.h - a.h) * (1 - Math.cos(Math.PI * f)) / 2, rising: b.h > a.h, next: b };
+    }
+  }
+  return null;
+}
+function renderTide(t) {
+  const b = $("c-tide").querySelector(".body");
+  if (!t || !t.points) { b.innerHTML = `<div class="err">${esc(t && t.error || "還沒有潮汐資料")}</div>`; return; }
+  b.innerHTML = `
+    <div class="row wrap" style="flex:1;min-height:0">
+      <div class="chart" id="tide-chart"></div>
+      <div class="side">
+        <div class="lb">現在潮位（築港）</div>
+        <div class="mid" style="color:var(--teal)" id="t-now">—</div>
+        <div id="t-dir" style="font-size:15px;color:var(--teal)"></div>
+        <div class="lb" style="margin-top:8px">下一個</div>
+        <div id="t-next" style="font-size:18px;font-weight:600"></div>
+        <div id="t-cd" class="lb"></div>
+      </div>
+    </div>
+    <div id="t-spring"></div>
+    ${t.error ? `<div class="err">最近一次更新失敗，顯示上次資料</div>` : ""}`;
+  drawTide();
+}
+function drawTide() {
+  const t = data && data.tide, box = $("tide-chart");
+  if (!t || !t.points || !box || !box.clientWidth) return;
+  const W = box.clientWidth, H = box.clientHeight, now = new Date();
+  const d0 = new Date(dayKey(now) + "T00:00:00"), d1 = addDays(d0, 1);
+  const pts = tidePts(t);
+  const near = pts.filter(p => p.t >= addDays(d0, -1) && p.t <= addDays(d1, 1));
+  const todayKey = dayKey(now), info = (t.days || []).find(d => d.date === todayKey);
+  $("tide-sub").textContent = info ? `今天${info.range}潮${info.lunar ? "（農曆" + (+info.lunar.slice(5, 7)) + "/" + (+info.lunar.slice(8, 10)) + "）" : ""}` : "";
+  if (!levelAt(pts, now)) { box.innerHTML = `<div class="err" style="padding:20px">潮汐資料已過期，請確認電腦端看板資料排程是否正常</div>`; tideGeom = null; return; }
+  const hs = near.map(p => p.h), lo = Math.min(...hs) - 0.35, hi = Math.max(...hs) + 0.3;
+  const L = 44, R = W - 10, T = 26, B = H - 22;
+  const X = d => L + (d - d0) / (d1 - d0) * (R - L), Y = v => B - (v - lo) / (hi - lo) * (B - T);
+  const sun = (t.sun || {})[todayKey];
+  let s = "";
+  if (sun) {
+    const sr = new Date(todayKey + "T" + sun[0] + ":00"), ss = new Date(todayKey + "T" + sun[1] + ":00");
+    s += `<rect x="${L}" y="${T - 8}" width="${X(sr) - L}" height="${B - T + 8}" fill="#070d13"/><rect x="${X(ss)}" y="${T - 8}" width="${R - X(ss)}" height="${B - T + 8}" fill="#070d13"/>`;
+    [[sr, "日出"], [ss, "日落"]].forEach(([d, n]) => {
+      s += `<line x1="${X(d)}" y1="${T - 8}" x2="${X(d)}" y2="${B}" stroke="#FAC775" stroke-dasharray="3 4"/><text x="${X(d)}" y="${T - 12}" font-size="12" fill="#FAC775" text-anchor="middle">${n} ${sun[n === "日出" ? 0 : 1]}</text>`;
+    });
+  }
+  for (let v = Math.ceil(lo * 2) / 2; v <= hi; v += 0.5) {
+    s += `<line x1="${L}" y1="${Y(v)}" x2="${R}" y2="${Y(v)}" stroke="#26333f"/><text x="${L - 6}" y="${Y(v) + 4}" font-size="11" fill="#6f8294" text-anchor="end">${sgn(v, 1)}</text>`;
+  }
+  for (let h = 0; h <= 24; h += 3) s += `<text x="${X(new Date(d0.getTime() + h * 36e5))}" y="${B + 16}" font-size="11" fill="#6f8294" text-anchor="middle">${h}時</text>`;
+  let d = "";
+  for (let m = 0; m <= 1440; m += 10) { const tt = new Date(d0.getTime() + m * 6e4), lv = levelAt(pts, tt); if (lv) d += (d ? "L" : "M") + X(tt).toFixed(1) + "," + Y(lv.v).toFixed(1); }
+  s += `<path id="t-water" fill="#185FA5" fill-opacity=".28"/>`;
+  s += `<path d="${d}" fill="none" stroke="#5DCAA5" stroke-width="2.6" ${firstRender && !quiet() ? `class="draw" style="--len:${Math.round(W * 1.6)}"` : ""}/>`;
+  pts.filter(p => p.t >= d0 && p.t < d1).forEach(p => {
+    const up = p.kind === "滿潮", x = X(p.t), y = Y(p.h), tx = Math.min(Math.max(x, L + 52), R - 52);
+    s += `<circle cx="${x}" cy="${y}" r="4" fill="#e8eef4"/><text x="${tx}" y="${up ? y - 9 : y + 18}" font-size="13" font-weight="600" fill="#e8eef4" text-anchor="middle">${up ? "滿" : "乾"} ${hm(p.t)} ${sgn(p.h)}</text>`;
+  });
+  s += `<g id="t-mark"></g>`;
+  box.innerHTML = `<svg viewBox="0 0 ${W} ${H}">${s}</svg>`;
+  tideGeom = { X, Y, L, R, B, T, pts };
+  tideLive(0);
+  // 大潮
+  const today = new Date(todayKey + "T00:00:00");
+  const sp = (t.springs || []).map(x => ({ ...x, s: new Date(x.start + "T00:00:00"), e: new Date(x.end + "T00:00:00") }));
+  const cur = sp.find(x => x.s <= today && today <= x.e), nxt = sp.find(x => x.s > today);
+  const peak = x => x.peak_t ? `，最高滿潮 ${md(P(x.peak_t))} ${hm(P(x.peak_t))} ${sgn(x.peak_h)} m` : "";
+  let html = "";
+  if (cur) html += `<div class="spring soon">大潮期間：${mdw(cur.s)}～${mdw(cur.e)}${peak(cur)}</div>`;
+  if (nxt) {
+    const n = Math.round((nxt.s - today) / 864e5);
+    html += `<div class="spring ${n <= 3 ? "soon" : ""}">${n <= 3 ? (n === 1 ? "明天" : n + " 天後") + "起大潮" : "下次大潮"}：${mdw(nxt.s)}～${mdw(nxt.e)}${peak(nxt)}</div>`;
+  }
+  $("t-spring").innerHTML = html;
+}
+let wavePh = 0;
+function tideLive(dtms) {
+  // 潮位數字照手機時鐘推算；曲線沒畫（看板手機輪播時隱藏）也要算
+  const td = data && data.tide;
+  if (!td || !td.points || !$("t-now")) return;
+  const now = new Date(), lv = levelAt(tideGeom ? tideGeom.pts : tidePts(td), now);
+  if (!lv) return;
+  if (tideGeom && $("t-water") && $("tide-chart").clientWidth) {
+    const { X, Y, L, R, B } = tideGeom;
+    wavePh += quiet() ? 0 : dtms / 400;
+    const y0 = Y(lv.v), amp = quiet() ? 0 : 2.2;
+    let p = `M${L},${B}`;
+    for (let x = L; x <= R; x += 6) p += `L${x},${(y0 + Math.sin(x / 24 + wavePh) * amp).toFixed(1)}`;
+    $("t-water").setAttribute("d", p + `L${R},${B}Z`);
+    const x = X(now);
+    const mk = $("t-mark");
+    if (mk) mk.innerHTML = `<line x1="${x}" y1="${tideGeom.T - 8}" x2="${x}" y2="${B}" stroke="#5DCAA5" stroke-width="1.4"/>` +
+      (quiet() ? "" : `<circle class="pulse" cx="${x}" cy="${y0}" r="6" fill="#5DCAA5"/>`) +
+      `<circle cx="${x}" cy="${y0}" r="6" fill="#0b1219" stroke="#5DCAA5" stroke-width="2.4"/>`;
+  }
+  $("t-now").textContent = sgn(lv.v) + " m";
+  $("t-dir").textContent = lv.rising ? "漲潮中 ↑" : "退潮中 ↓";
+  const nx = lv.next, mins = Math.max(0, Math.round((nx.t - now) / 6e4));
+  const sameDay = dayKey(nx.t) === dayKey(now);
+  $("t-next").textContent = `${nx.kind} ${sameDay ? "" : "明 "}${hm(nx.t)}　${sgn(nx.h)}`;
+  $("t-cd").textContent = `還有 ${Math.floor(mins / 60)} 小時 ${mins % 60} 分`;
+}
+
+/* ---------- 浪高（臺北港、[北堤] 逐 3 小時海象預報） ---------- */
+let wvOpen = new URLSearchParams(location.search).get("wv");   // 截圖用：?wv=H00100 預先展開表格
+const WV_COL = ["#5DCAA5", "#F0997B"];
+function wvNowIdx(series, now) { let k = 0; series.forEach((r, i) => { if (P(r.t) <= now) k = i; }); return k; }
+function renderWaves(w) {
+  const b = $("wave-body");
+  if (!w || !w.points) { b.innerHTML = `<div class="err">${esc(w && w.error || "還沒有浪高預報")}</div>`; return; }
+  const now = new Date(), warn = w.warn || 2, pts = w.points;
+  if (mode === "carousel") {           // 看板手機不能點：直接列表（未來 24 小時，兩點並排）
+    const a = pts[0], c = pts[1], i0 = wvNowIdx(a.series, now);
+    const rows = a.series.slice(i0, i0 + 9).map((r, i) => { const r2 = c && c.series[i0 + i]; const t = P(r.t);
+      return `<tr><td>${md(t)} ${pad(t.getHours())}時</td><td class="${r.h >= warn ? "hot" : ""}">${r.h.toFixed(1)}</td>${c ? `<td class="${r2 && r2.h >= warn ? "hot" : ""}">${r2 ? r2.h.toFixed(1) : "—"}</td>` : ""}<td>${esc(r.dir)}</td></tr>`; }).join("");
+    b.innerHTML = `<div class="wv-head"><span>浪高預報（m）・紅底＝${warn} m 以上</span></div><div class="wv-tbl" style="margin-top:0"><table><thead><tr><th>時間</th><th style="color:${WV_COL[0]}">${esc(a.label)}</th>${c ? `<th style="color:${WV_COL[1]}">${esc(c.label)}</th>` : ""}<th>浪向</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+    return;
+  }
+  const card = (pt, k) => {
+    const i = wvNowIdx(pt.series, now), cur = pt.series[i], pk = pt.series.reduce((m, r) => r.h > m.h ? r : m, pt.series[0]);
+    const pkRun = pt.series.filter(r => r.h === pk.h).map(r => P(r.t));
+    const pkTxt = pkRun.length > 1 ? `${md(pkRun[0])} ${pkRun[0].getHours()}時～${md(pkRun[pkRun.length - 1])} ${pkRun[pkRun.length - 1].getHours()}時` : `${md(pkRun[0])} ${pkRun[0].getHours()}時`;
+    return `<div class="wv-card ${wvOpen === pt.code ? "on" : ""}" data-code="${esc(pt.code)}"><span class="tg">逐 3 小時表格 ${wvOpen === pt.code ? "▴" : "▾"}</span><div style="color:${WV_COL[k]}">${esc(pt.label)}・${P(cur.t) <= now ? "現在" : md(P(cur.t)) + " " + P(cur.t).getHours() + "時"}</div><b>${cur.h.toFixed(1)} m</b> <span class="lb">週期 ${cur.p == null ? "—" : cur.p.toFixed(1) + " 秒"}・${esc(cur.dir)}</span><div style="color:${pk.h >= warn ? "var(--red)" : "var(--sub)"}">最高 ${pk.h.toFixed(1)} m（${pkTxt}）</div></div>`;
+  };
+  let tbl = "";
+  const op = pts.find(p => p.code === wvOpen);
+  if (op) {
+    let last = "", i0 = wvNowIdx(op.series, now);
+    const rows = op.series.map((r, i) => { const t = P(r.t), dk = mdw(t); let h = "";
+      if (dk !== last) { h += `<tr class="day"><td colspan="6">${dk}</td></tr>`; last = dk; }
+      return h + `<tr class="${i === i0 && t <= now ? "now" : ""}"><td>${pad(t.getHours())}:00</td><td class="${r.h >= warn ? "hot" : ""}">${r.h.toFixed(1)}</td><td>${r.p == null ? "—" : r.p.toFixed(1)}</td><td>${esc(r.dir)}</td><td>${esc(r.cs)}</td><td>${esc(r.cd)}</td></tr>`; }).join("");
+    tbl = `<div class="wv-tbl"><div class="wv-head"><b style="color:${WV_COL[pts.indexOf(op)]};font-size:14px">${esc(op.label === op.name ? op.label : op.label + " " + op.name)}　逐 3 小時海象預報</b><span>紅底＝浪高 ${warn} m 以上　<span class="wv-x" id="wv-close">收合 ✕</span></span></div>
+      <table><thead><tr><th style="width:16%">時間</th><th>浪高 (m)</th><th>週期 (秒)</th><th>浪向</th><th>流速 (m/s)</th><th>流向</th></tr></thead><tbody>${rows}</tbody></table>
+      <div class="note">浪向＝浪從哪裡來；流向＝海流往哪裡去（與氣象署網頁相同）</div></div>`;
+  }
+  b.innerHTML = `<div class="wv-head"><span>浪高預報（未來 3 天）</span><span>${pts.map((p, k) => `<i style="color:${WV_COL[k]}">━ ${esc(p.label)}</i>`).join("　")}　<i style="color:var(--red)">┅ ${warn} m 提醒線</i></span></div>
+    <div id="wave-chart"></div><div class="wv-cards">${pts.map(card).join("")}</div>${tbl}
+    <div class="note">氣象署海象預報・${hm(P(w.fetched))} 更新（每 3 小時）</div>${w.error ? `<div class="err">最近一次更新失敗，顯示上次資料</div>` : ""}`;
+  b.querySelectorAll(".wv-card").forEach(el => el.onclick = () => { wvOpen = wvOpen === el.dataset.code ? null : el.dataset.code; renderWaves(w); });
+  const x = $("wv-close"); if (x) x.onclick = () => { wvOpen = null; renderWaves(w); };
+  drawWaves();
+}
+function drawWaves() {
+  const w = data && data.waves, box = $("wave-chart");
+  if (!w || !w.points || !box || !box.clientWidth) return;
+  const W2 = box.clientWidth, H2 = box.clientHeight, L = 34, R = W2 - 8, T = 12, B = H2 - 20, warn = w.warn || 2, now = new Date();
+  const all = w.points.flatMap(p => p.series), t0 = P(all[0].t), t1 = new Date(Math.max(...all.map(r => +P(r.t))));
+  const hmax = Math.max(3, Math.ceil(Math.max(...all.map(r => r.h)) + 0.5));
+  const X = t => L + (t - t0) / (t1 - t0) * (R - L), Y = v => B - v / hmax * (B - T);
+  let s = "";
+  for (let v = 0; v <= hmax; v++) s += `<line x1="${L}" y1="${Y(v)}" x2="${R}" y2="${Y(v)}" stroke="#26333f"/><text x="${L - 5}" y="${Y(v) + 4}" font-size="11" fill="#6f8294" text-anchor="end">${v}m</text>`;
+  w.points.forEach(p => p.series.forEach((r, i) => { const n = p.series[i + 1]; if (n && (r.h >= warn || n.h >= warn)) s += `<rect x="${X(P(r.t))}" y="${T}" width="${X(P(n.t)) - X(P(r.t))}" height="${B - T}" fill="#501313" fill-opacity=".22"/>`; }));
+  for (let d = new Date(t0.getFullYear(), t0.getMonth(), t0.getDate() + 1); d <= t1; d = addDays(d, 1)) s += `<line x1="${X(d)}" y1="${T}" x2="${X(d)}" y2="${B}" stroke="#3a4a5a" stroke-dasharray="2 4"/><text x="${X(d)}" y="${B + 15}" font-size="11" fill="#6f8294" text-anchor="middle">${mdw(d)}</text>`;
+  s += `<line x1="${L}" y1="${Y(warn)}" x2="${R}" y2="${Y(warn)}" stroke="#F7C1C1" stroke-dasharray="5 4"/>`;
+  const anim = firstRender && !quiet() ? `class="draw" style="--len:${Math.round(W2 * 1.6)}"` : "";
+  w.points.slice().reverse().forEach(p => { const k = w.points.indexOf(p);
+    s += `<polyline points="${p.series.map(r => X(P(r.t)).toFixed(1) + "," + Y(r.h).toFixed(1)).join(" ")}" fill="none" stroke="${WV_COL[k]}" stroke-width="${k ? 2 : 2.6}" ${anim}/>`;
+    const pk = p.series.reduce((m, r) => r.h > m.h ? r : m, p.series[0]);
+    s += `<circle cx="${X(P(pk.t))}" cy="${Y(pk.h)}" r="4" fill="${WV_COL[k]}"/><text x="${X(P(pk.t))}" y="${Y(pk.h) - 7}" font-size="12" font-weight="600" fill="${WV_COL[k]}" text-anchor="middle">${pk.h.toFixed(1)}</text>`; });
+  if (now >= t0 && now <= t1) s += `<line x1="${X(now)}" y1="${T}" x2="${X(now)}" y2="${B}" stroke="#5DCAA5" stroke-width="1.2"/><text x="${X(now) + 4}" y="${T + 10}" font-size="11" fill="#5DCAA5">現在</text>`;
+  box.innerHTML = `<svg viewBox="0 0 ${W2} ${H2}">${s}</svg>`;
+}
+
+/* ---------- 颱風 ---------- */
+function renderTyphoon(y) {
+  const b = $("c-typhoon").querySelector(".body"), on = y && y.active, tcs = (y && y.cyclones) || [];
+  document.body.classList.toggle("typhoon", !!on);
+  $("ty-sub").textContent = on ? "警報期間每 15 分鐘更新" : tcs.length ? "颱風消息・每 3 小時更新" : "平常每 6 小時檢查";
+  if (!y || y.error && y.active === undefined) { b.innerHTML = `<div class="err">${esc(y && y.error || "還沒有颱風資料")}</div>`; return; }
+  if (!on && !tcs.length) {
+    b.innerHTML = `<div class="ty-off"><div class="ic"></div><div style="font-size:17px;color:var(--ink)">目前沒有颱風</div><div class="lb">有颱風消息時這格會顯示位置與路徑</div><div class="note">檢查時間 ${hm(P(y.fetched))}</div></div>`;
+    return;
+  }
+  const main = tcs.find(t => t.name === y.main) || tcs[0];
+  const km = n => n == null ? "—" : Number(n).toLocaleString();
+  const info = main ? `
+      <div style="font-size:20px;font-weight:600;margin-top:6px">${esc(main.scale)} ${esc(main.name)} <span class="lb">${esc(main.eng)}</span></div>
+      <div style="font-size:15px;line-height:1.6;margin-top:2px">
+        目前在臺北港<b>${esc(main.bearing)}方約 ${km(main.dist_km)} 公里</b><br>
+        ${main.near_t ? `預測 <b style="color:var(--amber)">${mdw(P(main.near_t))} ${P(main.near_t).getHours()} 時最接近，約 ${km(main.near_km)} 公里</b><br>` : ""}
+        <span class="lb">${esc(main.moving || "")}・中心氣壓 ${fmt(main.pressure)} 百帕・最大風速每秒 ${fmt(main.wind)} 公尺・${hm(P(main.analysis))} 分析</span>
+      </div>
+      ${tcs.length > 1 ? `<div class="lb">另有：${tcs.filter(t => t !== main).map(t => esc(t.name) + "（" + esc(t.bearing) + "方 " + km(t.dist_km) + " 公里）").join("、")}</div>` : ""}` : "";
+  const head = on
+    ? `<span class="hl">${esc(y.headline || "颱風警報")}</span><div style="margin-top:6px;font-size:15px">第 ${esc(y.no || "?")} 報${y.effective ? "・" + mdw(P(y.effective)) + " " + hm(P(y.effective)) + " 發布" : ""}</div>`
+    : `<span class="chip" style="background:var(--amber-bg);color:var(--amber);font-size:15px">颱風消息・尚未發布警報</span>`;
+  b.innerHTML = `<div class="ty-on">${head}${info}</div>
+    ${y.image ? `<div class="ty-img"><a href="${esc(y.image)}" target="_blank" title="點一下放大路徑圖"><img src="${esc(y.image)}" alt="颱風路徑圖"></a></div>` : ""}
+    ${y.error ? `<div class="err">最近一次更新失敗，顯示上次資料</div>` : ""}`;
+}
+
+/* ---------- 抗壓 ---------- */
+let ctOpen = false;
+function renderConcrete(c) {
+  const b = $("c-concrete").querySelector(".body");
+  if (!c || !c.tests) { b.innerHTML = `<div class="err">${esc(c && c.error || "還沒有抗壓資料")}</div>`; return; }
+  const now = new Date(), tk = dayKey(now), mk = dayKey(addDays(now, 1)), wk = dayKey(addDays(now, 7));
+  const groups = {};
+  c.tests.filter(x => x.date >= tk).forEach(x => {
+    const k = x.date + "|" + x.age + "|" + x.place;
+    (groups[x.date] = groups[x.date] || {});
+    groups[x.date][k] = groups[x.date][k] || { ...x, n: 0 };
+    groups[x.date][k].n++;
+  });
+  const dayBlock = (key, label, cls) => {
+    const g = Object.values(groups[key] || {});
+    const n = g.reduce((a, x) => a + x.n, 0);
+    return `<div class="ct-day ${cls}"><div class="d">${label}・${n ? n + " 組" : "無"}</div>${g.map(x =>
+      `<div class="ct"><span class="a">${x.age} 天</span><span class="p" title="${esc(x.full)}">${esc(x.place)}${x.n > 1 ? `（${x.n} 組）` : ""}${x.clsm ? `<span class="tag">CLSM</span>` : ""}</span></div>`).join("")}</div>`;
+  };
+  const later = Object.keys(groups).filter(k => k > mk && k <= wk).sort();
+  const laterN = later.reduce((a, k) => a + Object.values(groups[k]).reduce((s, x) => s + x.n, 0), 0);
+  b.innerHTML = `<div class="ct-list">
+      ${dayBlock(tk, "今天 " + mdw(now), "today")}
+      ${dayBlock(mk, "明天 " + mdw(addDays(now, 1)), "tomorrow")}
+      ${later.length ? `<div class="ct-day"><div class="d ct-fold" id="ct-fold">${ctOpen ? "▾" : "▸"} 之後 7 天內・${laterN} 組 <span class="ct-hint">${ctOpen ? "點一下收合" : "點一下展開"}</span></div><div id="ct-later" style="${ctOpen ? "" : "display:none"}">${later.map(k => Object.values(groups[k]).map(x =>
+        `<div class="ct"><span class="a" style="font-weight:400;color:var(--sub);width:auto;min-width:86px">${mdw(new Date(k + "T00:00:00"))}</span><span class="a">${x.age} 天</span><span class="p" title="${esc(x.full)}">${esc(x.place)}${x.n > 1 ? `（${x.n} 組）` : ""}</span></div>`).join("")).join("")}</div></div>` : ""}
+    </div>
+    ${c.warning ? `<div class="note" style="color:var(--amber)">⚠ ${esc(c.warning)}</div>` : ""}`;
+  b.innerHTML += `
+    <div class="note">統計表最後修改 ${c.source_mtime ? mdw(P(c.source_mtime)) + " " + hm(P(c.source_mtime)) : "—"}</div>
+    ${c.error ? `<div class="err">最近一次讀取失敗，顯示上次資料</div>` : ""}`;
+  const fold = $("ct-fold");
+  if (fold) fold.onclick = () => { ctOpen = !ctOpen; renderConcrete(c); };
+}
+
+/* ---------- 進度 ---------- */
+function renderProgress(p) {
+  const b = $("pg-main");
+  if (!p || !p.series) { b.innerHTML = `<div class="err">${esc(p && p.error || "還沒有進度資料")}</div>`; return; }
+  const diff = p.actual - p.planned;
+  $("pg-sub").textContent = "截至 " + roc(new Date(p.asof + "T00:00:00"));
+  b.innerHTML = `<div class="row wrap" style="flex:1;min-height:0">
+      <div class="chart" id="pg-chart"></div>
+      <div class="side">
+        <div class="lb">預定進度</div><div class="mid" style="color:var(--blue)" id="pg-plan">—</div>
+        <div class="lb" style="margin-top:6px">實際進度</div><div class="mid" style="color:var(--teal)" id="pg-act">—</div>
+        <div style="font-size:16px;margin-top:4px;color:${diff >= 0 ? "var(--teal)" : "var(--coral)"}">${diff >= 0 ? "超前" : "落後"} ${Math.abs(diff).toFixed(2)}%</div>
+      </div></div>
+    ${p.error ? `<div class="err">最近一次讀取失敗，顯示上次資料</div>` : ""}`;
+  countUp($("pg-plan"), p.planned, 2, "", "%");
+  countUp($("pg-act"), p.actual, 2, "", "%");
+  drawProgress();
+}
+function drawProgress() {
+  const p = data && data.progress, box = $("pg-chart");
+  if (!p || !p.series || !box || !box.clientWidth) return;
+  const W = box.clientWidth, H = box.clientHeight, L = 36, R = W - 8, T = 14, B = H - 22;
+  const t0 = P(p.series[0][0]), t1 = P(p.series[p.series.length - 1][0]);
+  const X = d => L + (d - t0) / (t1 - t0) * (R - L), Y = v => B - v / 100 * (B - T);
+  let s = "";
+  for (let v = 0; v <= 100; v += 25) s += `<line x1="${L}" y1="${Y(v)}" x2="${R}" y2="${Y(v)}" stroke="#26333f"/><text x="${L - 6}" y="${Y(v) + 4}" font-size="11" fill="#6f8294" text-anchor="end">${v}%</text>`;
+  for (let y = t0.getFullYear() + 1; y <= t1.getFullYear(); y++) { const d = new Date(y + "-01-01T00:00:00"); s += `<text x="${X(d)}" y="${B + 16}" font-size="11" fill="#6f8294" text-anchor="middle">${y - 1911}年</text><line x1="${X(d)}" y1="${B}" x2="${X(d)}" y2="${B + 4}" stroke="#3a4a5a"/>`; }
+  (p.events || []).forEach(e => { const x = X(P(e.d)); s += `<line x1="${x}" y1="${T}" x2="${x}" y2="${B}" stroke="#3a4a5a" stroke-dasharray="2 4"><title>${esc(e.label)}</title></line>`; });
+  const line = k => p.series.map((r, i) => (i ? "L" : "M") + X(P(r[0])).toFixed(1) + "," + Y(r[k]).toFixed(1)).join("");
+  const anim = firstRender && !quiet() ? `class="draw" style="--len:${Math.round(W * 1.8)}"` : "";
+  s += `<path d="${line(1)}" fill="none" stroke="#85B7EB" stroke-width="2" ${anim}/><path d="${line(2)}" fill="none" stroke="#5DCAA5" stroke-width="2.6" ${anim}/>`;
+  const last = p.series[p.series.length - 1];
+  s += `<circle cx="${X(P(last[0]))}" cy="${Y(last[2])}" r="4.5" fill="#5DCAA5"/>`;
+  s += `<text x="${L + 6}" y="${T + 12}" font-size="12" fill="#85B7EB">— 預定</text><text x="${L + 62}" y="${T + 12}" font-size="12" fill="#5DCAA5">— 實際</text>`;
+  box.innerHTML = `<svg viewBox="0 0 ${W} ${H}">${s}</svg>`;
+}
+
+/* ---------- 工程進行情況（監造日報表 一、） ---------- */
+function renderWork(w) {
+  const b = $("pg-work");
+  if (!w || !w.items) { b.innerHTML = `<div class="err">${esc(w && w.error || "還沒有日報表資料")}</div>`; return; }
+  const d = new Date(w.date + "T00:00:00");
+  const back = w.target && w.target !== w.date;
+  b.innerHTML = `<div class="lb" style="margin-bottom:4px">${roc(d)} 日報表${back ? `<span style="color:var(--amber)">（${md(new Date(w.target + "T00:00:00"))} 尚未填寫，顯示前一筆）</span>` : ""}</div>
+    <ol class="work">${w.items.map(t => `<li>${esc(t.replace(/^\s*\d+\s*[.、．]\s*/, ""))}</li>`).join("")}</ol>
+    <div class="note">來源：監造日報</div>
+    ${w.error ? `<div class="err">最近一次讀取失敗，顯示上次資料</div>` : ""}`;
+}
+
+/* ---------- 布告欄 ---------- */
+let bull = null, bullJSON = "", isAdmin = false, blIdx = 0, blPaused = false, blT0 = Date.now(), blAll = false;
+const BL_ROTATE = 15000;
+const BL_PREVIEW = 50;    // 預覽最多 50 字（畫面上再限 2 行，手機約 2 行、電腦約 1～2 行）
+const BL_PHONE_N = 3;     // 手機先列 3 則，其餘按「看全部」
+const linkify = s => esc(s).replace(/https?:\/\/[^\s<]+/g, u => `<a href="${u}" target="_blank" rel="noopener">${u}</a>`).replace(/\n/g, "<br>");
+function activePosts() {
+  const tk = dayKey(new Date()), rank = p => p.level === "緊急" ? 0 : p.pin ? 1 : 2;
+  return ((bull && bull.posts) || []).filter(p => !p.expire || p.expire >= tk)
+    .sort((a, b) => rank(a) - rank(b) || (b.created || "").localeCompare(a.created || ""));
+}
+function fmtPostTime(s) { if (!s) return ""; const d = P(s); return (dayKey(d) === dayKey(new Date()) ? "今天 " : mdw(d) + " ") + hm(d); }
+function renderBulletin() {
+  const b = $("c-bulletin").querySelector(".body"), ps = activePosts();
+  $("bl-count").textContent = ps.length ? `${ps.length} 則` : "";
+  $("bl-admin").innerHTML = isAdmin && mode !== "carousel" ? `<a class="adminlink" href="admin" target="_blank">✎ 發布公告</a>` : "";
+  const urg = ps.filter(p => p.level === "緊急");
+  $("urgent").textContent = urg.length ? "緊急公告：" + urg.map(p => p.title).join("　｜　") : "";
+  $("urgent").classList.toggle("on", !!urg.length);
+  if (!ps.length) { b.innerHTML = `<div class="bl-empty"><div style="font-size:17px;color:var(--ink)">目前沒有公告</div>${isAdmin ? '<div class="lb">按右上角「發布公告」新增一則</div>' : ""}</div>`; return; }
+  if (mode !== "carousel") { renderBulletinCards(b, ps); return; }
+  blIdx = Math.min(blIdx, ps.length - 1);
+  const p = ps[blIdx], imgs = p.images || [];
+  b.innerHTML = `<div class="bl">
+    <div class="bl-feat">
+      <div class="bl-tags"><span class="lv lv-${esc(p.level)}">${esc(p.level)}</span>${p.pin ? '<span style="color:var(--amber);font-size:13px">📌 置頂</span>' : ""}${p.public && !PUBLIC ? '<span style="color:var(--blue);font-size:13px">🌐 已公開</span>' : ""}<span class="lb">${fmtPostTime(p.created)}${p.updated && p.updated !== p.created ? "（已修改）" : ""}</span></div>
+      <div class="bl-title">${esc(p.title)}</div>
+      <div class="bl-main">
+        <div class="bl-body">${linkify(p.body || "")}<div class="bl-links">${(p.links || []).map(l => `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.text)} ↗</a>`).join("")}</div></div>
+        ${imgs.length ? `<div class="bl-imgs"><img src="bimg/${esc(imgs[0])}" alt="公告照片">${imgs.length > 1 ? `<div class="more">共 ${imgs.length} 張，點照片放大可切換</div>` : ""}</div>` : ""}
+      </div>
+      ${ps.length > 1 ? '<div class="bl-bar"><i id="bl-prog"></i></div>' : ""}
+    </div>
+    ${ps.length > 1 || mode === "stack" ? `<div class="bl-list">${ps.map((q, i) => `<div class="bl-it ${i === blIdx ? "on" : ""}" data-i="${i}"><span class="lv lv-${esc(q.level)}">${esc(q.level)}</span><div class="n"><b>${q.pin ? "📌 " : ""}${esc(q.title)}</b><span>${fmtPostTime(q.created)}${(q.images || []).length ? "・照片" : ""}</span></div></div>`).join("")}</div>` : ""}
+  </div>`;
+  b.querySelectorAll(".bl-it").forEach(el => el.onclick = () => { blIdx = +el.dataset.i; blT0 = Date.now(); renderBulletin(); });
+  b.querySelectorAll(".bl-imgs img").forEach(el => el.onclick = () => openLB(imgs, 0, p.title));
+}
+const blTags = p => `<div class="bl-tags"><span class="lv lv-${esc(p.level)}">${esc(p.level)}</span>${p.pin ? '<span style="color:var(--amber);font-size:13px">📌 置頂</span>' : ""}${p.public && !PUBLIC ? '<span style="color:var(--blue);font-size:13px">🌐 已公開</span>' : ""}<span class="lb">${fmtPostTime(p.created)}${p.updated && p.updated !== p.created ? "（已修改）" : ""}</span></div>`;
+function blPreview(s) {
+  const t = String(s || "").replace(/https?:\/\/\S+/g, "").replace(/[#*>]+/g, " ").replace(/\s+/g, " ").trim();   // 去掉網址與 # * > 這類排版符號
+  return t.length > BL_PREVIEW ? t.slice(0, BL_PREVIEW) + "…" : t;
+}
+function renderBulletinCards(b, ps) {   // 電腦、手機：卡片清單，點開看全文
+  const lim = mode === "stack" && !blAll ? BL_PHONE_N : ps.length;
+  b.innerHTML = `<div class="bl-cards">${ps.slice(0, lim).map((p, i) => {
+    const im = p.images || [];
+    return `<div class="bl-card" data-i="${i}" role="button" tabindex="0"><div class="t">${blTags(p)}<b>${esc(p.title)}</b>${p.body ? `<p>${esc(blPreview(p.body))}</p>` : ""}</div>${im.length ? `<span class="th"><img src="bimg/${esc(im[0])}" alt="" loading="lazy">${im.length > 1 ? `<i>${im.length} 張</i>` : ""}</span>` : ""}</div>`;
+  }).join("")}${ps.length > lim ? `<button class="bl-allbtn" type="button">看全部 ${ps.length} 則 ▾</button>` : ""}</div>`;
+  b.querySelectorAll(".bl-card").forEach(el => {
+    el.onclick = () => openPost(ps[+el.dataset.i]);
+    el.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openPost(ps[+el.dataset.i]); } };
+  });
+  const more = b.querySelector(".bl-allbtn");
+  if (more) more.onclick = () => { blAll = true; renderBulletin(); };
+}
+function openPost(p) {
+  const imgs = p.images || [];
+  $("bl-dlg-c").innerHTML = `${blTags(p)}<div class="bl-title">${esc(p.title)}</div>
+    <div class="bl-body">${linkify(p.body || "")}<div class="bl-links">${(p.links || []).map(l => `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.text)} ↗</a>`).join("")}</div></div>
+    ${imgs.length ? `<div class="dl-imgs">${imgs.map((n, i) => `<img src="bimg/${esc(n)}" alt="公告照片 ${i + 1}" data-i="${i}">`).join("")}</div>` : ""}`;
+  $("bl-dlg-c").querySelectorAll(".dl-imgs img").forEach(el => el.onclick = () => openLB(imgs, +el.dataset.i, p.title));
+  $("bl-dlg").classList.add("on");
+  $("bl-dlg").querySelector(".box").scrollTop = 0;
+}
+const closePost = () => $("bl-dlg").classList.remove("on");
+$("bl-dlg").querySelector(".x").onclick = closePost;
+$("bl-dlg").onclick = e => { if (e.target.id === "bl-dlg") closePost(); };
+addEventListener("keydown", e => { if (e.key === "Escape" && $("bl-dlg").classList.contains("on") && !$("lb").classList.contains("on")) closePost(); });
+$("c-bulletin").addEventListener("mouseenter", () => blPaused = true);
+$("c-bulletin").addEventListener("mouseleave", () => { blPaused = false; blT0 = Date.now(); });
+setInterval(() => {
+  const ps = activePosts(), bar = $("bl-prog");
+  if (ps.length < 2 || mode !== "carousel") return;   // 只有看板輪播才自動換下一則
+  if (blPaused || $("lb").classList.contains("on")) { blT0 = Date.now() - (bar ? parseFloat(bar.style.width || 0) / 100 * BL_ROTATE : 0); return; }
+  const k = (Date.now() - blT0) / BL_ROTATE;
+  if (k >= 1) { blIdx = (blIdx + 1) % ps.length; blT0 = Date.now(); renderBulletin(); return; }
+  if (bar) bar.style.width = (k * 100).toFixed(1) + "%";
+}, 200);
+/* 照片放大 */
+let lbImgs = [], lbI = 0, lbCap = "";
+function openLB(imgs, i, cap) { lbImgs = imgs; lbI = i; lbCap = cap; showLB(); $("lb").classList.add("on"); }
+function showLB() {   // 公告照片給檔名；現況影像給 {src, cap}
+  const lb = $("lb"), it = lbImgs[lbI], obj = typeof it === "object";
+  lb.querySelector("img").src = obj ? it.src : "bimg/" + it;
+  lb.querySelector(".cap").textContent = `${obj ? it.cap : lbCap}　${lbI + 1} / ${lbImgs.length}`; lb.querySelector(".p").style.display = lb.querySelector(".nx").style.display = lbImgs.length > 1 ? "" : "none"; }
+function closeLB() { $("lb").classList.remove("on"); }
+$("lb").querySelector(".c").onclick = closeLB;
+$("lb").querySelector(".p").onclick = e => { e.stopPropagation(); lbI = (lbI + lbImgs.length - 1) % lbImgs.length; showLB(); };
+$("lb").querySelector(".nx").onclick = e => { e.stopPropagation(); lbI = (lbI + 1) % lbImgs.length; showLB(); };
+$("lb").onclick = e => { if (e.target.id === "lb") closeLB(); };
+addEventListener("keydown", e => { if (!$("lb").classList.contains("on")) return; if (e.key === "Escape") closeLB(); if (e.key === "ArrowLeft") $("lb").querySelector(".p").click(); if (e.key === "ArrowRight") $("lb").querySelector(".nx").click(); });
+async function pollBulletin() {
+  try {
+    const r = await fetch("bulletin.json?t=" + Date.now(), { cache: "no-store" });
+    if (!r.ok) throw new Error(r.status);
+    const j = await r.json(), js = JSON.stringify(j);
+    try { localStorage.setItem("bulletin", js); } catch (e) {}
+    if (js !== bullJSON) {
+      const first = !bullJSON; bullJSON = js; bull = j;
+      if (introDone) { renderBulletin(); if (!first && !quiet()) { const c = $("c-bulletin"); c.classList.remove("flash"); void c.offsetWidth; c.classList.add("flash"); } if (mode === "carousel") showPage(); }
+    }
+  } catch (e) {
+    if (!bull) { try { bull = JSON.parse(localStorage.getItem("bulletin")); bullJSON = JSON.stringify(bull); } catch (e2) {} }
+  }
+}
+if (!PUBLIC) fetch("api/me").then(r => r.json()).then(j => { isAdmin = !!j.admin; if (introDone) renderBulletin(); }).catch(() => {});
+
+/* ---------- 共用 ---------- */
+function redrawCharts() { drawTide(); drawProgress(); drawWaves(); }
+/* ---------- 開場動畫：播完（或按略過、播放失敗）才讓看板進場 ---------- */
+let introDone = false;
+function endIntro() {
+  if (introDone) return;
+  introDone = true;
+  const el = $("intro");
+  el.classList.add("out");
+  setTimeout(() => { el.classList.add("gone"); const v = $("introv"); v.pause(); v.removeAttribute("src"); v.load(); }, 900);
+  render();
+}
+(function startIntro() {
+  const v = $("introv"), h = new Date().getHours();
+  if (KIOSK && (h >= NIGHT_FROM || h < NIGHT_TO)) { endIntro(); return; }   // 看板手機夜間不播
+  if (new URLSearchParams(location.search).has("nointro")) { endIntro(); return; }   // 截圖／簡報用：不播開場動畫
+  v.addEventListener("ended", endIntro);
+  v.addEventListener("error", endIntro);
+  $("skip").addEventListener("click", endIntro);
+  const p = v.play(); if (p && p.catch) p.catch(endIntro);                  // 瀏覽器不讓自動播放就直接進看板
+  setTimeout(endIntro, 15000);                                              // 保險：最多 15 秒
+})();
+
+function render() {
+  if (!data || !introDone) return;
+  const secs = { weather: renderWeather, tide: renderTide, waves: renderWaves, typhoon: renderTyphoon, concrete: renderConcrete, progress: renderProgress, work: renderWork };
+  for (const [k, fn] of Object.entries(secs)) {
+    const js = JSON.stringify(data[k] || null);
+    if (js === prevJSON[k]) continue;
+    fn(data[k]);
+    const card = $(k === "work" ? "c-progress" : k === "waves" ? "c-tide" : "c-" + k);
+    if (!firstRender && !quiet()) { card.classList.remove("flash"); void card.offsetWidth; card.classList.add("flash"); }
+    prevJSON[k] = js;
+  }
+  if (firstRender) renderBulletin();
+  if (firstRender && !quiet()) document.querySelectorAll(".card").forEach((c, i) => { c.style.animationDelay = (i * 0.12) + "s"; c.classList.add("enter"); });
+  firstRender = false;
+  showPage();
+}
+function status() {
+  const now = new Date(), upd = data && data.updated ? P(data.updated) : null;
+  $("upd").textContent = upd ? "資料更新 " + hm(upd) : "資料更新 —";
+  let msg = "";
+  if (PUBLIC) { if (upd && now - upd > STALE_MIN * 6e4) msg = `以下資料停在 ${mdw(upd)} ${hm(upd)}；潮位與時間仍會照您的裝置時鐘推算`; }
+  else if (lastOk && now - lastOk > 3 * POLL_SEC * 1000) msg = `看板主機連不上（電腦可能關機或網路中斷），以下資料停在 ${mdw(upd)} ${hm(upd)}；潮位與時間仍會照手機時鐘推算`;
+  else if (upd && now - upd > STALE_MIN * 6e4) msg = `資料停在 ${mdw(upd)} ${hm(upd)}，電腦端的看板資料排程可能停了`;
+  else if (!data) msg = "正在讀取資料…";
+  $("banner").textContent = msg;
+  $("banner").classList.toggle("on", !!msg);
+}
+async function poll() {
+  try {
+    const r = await fetch("board.json?t=" + Date.now(), { cache: "no-store" });
+    if (!r.ok) throw new Error(r.status);
+    data = await r.json();
+    lastOk = new Date();
+    try { localStorage.setItem("board", JSON.stringify(data)); } catch (e) {}
+    render();
+  } catch (e) {
+    if (!data) { try { data = JSON.parse(localStorage.getItem("board")); render(); } catch (e2) {} }
+    if (!lastOk) lastOk = new Date(0);
+  }
+  status();
+}
+function clock() {
+  const now = new Date();
+  $("clock").textContent = hm(now);
+  $("today").textContent = roc(now);
+  if (KIOSK && !SHOT) {   // 截圖模式不進夜間
+    const h = now.getHours(), night = h >= NIGHT_FROM || h < NIGHT_TO;
+    if (night !== document.body.classList.contains("night")) { document.body.classList.toggle("night", night); redrawCharts(); }
+  }
+}
+let lastDay = dayKey(new Date()), lastT = performance.now();
+setInterval(() => {
+  clock();
+  status();
+  if (dayKey(new Date()) !== lastDay) { lastDay = dayKey(new Date()); prevJSON = {}; render(); }
+}, 1000);
+setInterval(() => { const t = performance.now(); tideLive(t - lastT); lastT = t; }, 120);
+setInterval(poll, POLL_SEC * 1000);
+setInterval(pollBulletin, POLL_SEC * 1000);
+let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { pickMode(); redrawCharts(); }, 150); });
+{ // 截圖用：?fixvh=1080 讓電腦版上兩列照 1080 高排，視窗拉高也能截到下方潮汐區
+  const fv = +new URLSearchParams(location.search).get("fixvh");
+  if (fv) { const r = Math.max(330, (fv - 116) / 2); document.querySelector(".grid").style.gridTemplateRows = `${r}px ${r}px minmax(400px,auto) auto`; }
+}
+// ---------- 本日工地現況影像（內部看板才有；監視器那邊抓不到時就沿用上一輪的圖，不顯示故障） ----------
+let camData = { cams: [] };
+const camTime = t => { const d = new Date(t); return (d.toDateString() === new Date().toDateString() ? "" : `${d.getMonth() + 1}/${d.getDate()} `) + hm(d); };
+function renderCam() {
+  const cams = camData.cams || [];
+  $("c-cam").classList.toggle("off", !cams.length);
+  if (!cams.length) return;
+  const src = c => `cam/${c.id}.jpg?v=${encodeURIComponent(c.time)}`;
+  $("cam-g").innerHTML = cams.map((c, i) => `<div class="camt" data-i="${i}"><img src="${src(c)}" alt="${esc(c.name)}"><span>${esc(c.name)}・${camTime(c.time)}</span></div>`).join("");
+  const list = cams.map(c => ({ src: src(c), cap: `本日工地現況影像　${c.name}　${camTime(c.time)}` }));
+  $("cam-g").querySelectorAll(".camt").forEach(el => el.onclick = () => openLB(list, +el.dataset.i, ""));
+}
+async function pollCam() {
+  if (PUBLIC) return;
+  try {
+    const j = await (await fetch(`cam/index.json?t=${Date.now()}`, { cache: "no-store" })).json();
+    if (JSON.stringify(j.cams) !== JSON.stringify(camData.cams)) { camData = { cams: j.cams || [] }; renderCam(); }
+  } catch (e) { /* 看板主機連不上時沿用畫面上的 */ }
+}
+setInterval(pollCam, 5 * 60 * 1000);
+
+clock(); pickMode(); pollBulletin(); poll(); pollCam();
+</script>
+</body>
+</html>
